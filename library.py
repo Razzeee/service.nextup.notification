@@ -104,7 +104,7 @@ class LibraryFunctions():
         json_string = json.dumps(json_query)
         rv = xbmc.executeJSONRPC(json_string)
 
-        return unicode(rv, 'utf-8', errors='ignore')
+        return str(rv, 'utf-8', errors='ignore')
 
     # Recommended episodes: Earliest unwatched episode from in-progress shows
     def _fetch_recommended_episodes(self):

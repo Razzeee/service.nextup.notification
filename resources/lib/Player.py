@@ -1,14 +1,14 @@
 import xbmcaddon
 import xbmc
 import xbmcgui
-import Utils as utils
+from . import Utils as utils
 import AddonSignals
 import library
-from ClientInformation import ClientInformation
-from NextUpInfo import NextUpInfo
-from StillWatchingInfo import StillWatchingInfo
-from UnwatchedInfo import UnwatchedInfo
-from PostPlayInfo import PostPlayInfo
+from .ClientInformation import ClientInformation
+from .NextUpInfo import NextUpInfo
+from .StillWatchingInfo import StillWatchingInfo
+from .UnwatchedInfo import UnwatchedInfo
+from .PostPlayInfo import PostPlayInfo
 import sys
 
 if sys.version_info < (2, 7):
@@ -51,7 +51,7 @@ class Player(xbmc.Player):
         try:
             xbmc_request = json.dumps(query)
             result = xbmc.executeJSONRPC(xbmc_request)
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             if ret:
                 return json.loads(result)['result']
 
@@ -60,7 +60,7 @@ class Player(xbmc.Player):
         except:
             xbmc_request = json.dumps(query)
             result = xbmc.executeJSONRPC(xbmc_request)
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg(json.loads(result), 1)
             return json.loads(result)
 
@@ -73,14 +73,14 @@ class Player(xbmc.Player):
 
         # Get the active player
         result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-        result = unicode(result, 'utf-8', errors='ignore')
+        result = str(result, 'utf-8', errors='ignore')
         self.logMsg("Got active player " + result, 2)
         result = json.loads(result)
 
         # Seems to work too fast loop whilst waiting for it to become active
         while not result["result"]:
             result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got active player " + result, 2)
             result = json.loads(result)
 
@@ -92,7 +92,7 @@ class Player(xbmc.Player):
             result = xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "id": 1, "method": "Player.GetItem", "params": {"playerid": ' + str(
                     playerid) + ', "properties": ["showtitle", "tvshowid", "episode", "season", "playcount","genre"] } }')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got details of now playing media" + result, 2)
 
             result = json.loads(result)
@@ -208,14 +208,14 @@ class Player(xbmc.Player):
 
         # Get the active player
         result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-        result = unicode(result, 'utf-8', errors='ignore')
+        result = str(result, 'utf-8', errors='ignore')
         self.logMsg("Got active player " + result, 2)
         result = json.loads(result)
 
         # Seems to work too fast loop whilst waiting for it to become active
         while not result["result"]:
             result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got active player " + result, 2)
             result = json.loads(result)
 
@@ -227,7 +227,7 @@ class Player(xbmc.Player):
             result = xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "id": 1, "method": "Player.GetItem", "params": {"playerid": ' + str(
                     playerid) + ', "properties": ["showtitle", "tvshowid", "episode", "season", "playcount","genre"] } }')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got details of playing media" + result, 2)
 
             result = json.loads(result)
@@ -287,14 +287,14 @@ class Player(xbmc.Player):
 
         # Get the active player
         result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-        result = unicode(result, 'utf-8', errors='ignore')
+        result = str(result, 'utf-8', errors='ignore')
         self.logMsg("Got active player " + result, 2)
         result = json.loads(result)
 
         # Seems to work too fast loop whilst waiting for it to become active
         while not result["result"]:
             result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got active player " + result, 2)
             result = json.loads(result)
 
@@ -306,7 +306,7 @@ class Player(xbmc.Player):
             result = xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "id": 1, "method": "Player.GetItem", "params": {"playerid": ' + str(
                     playerid) + ', "properties": ["showtitle", "tvshowid", "episode", "season", "playcount"] } }')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got details of playing media" + result, 2)
 
             result = json.loads(result)
@@ -351,7 +351,7 @@ class Player(xbmc.Player):
                 % tvshowid)
 
             if result:
-                result = unicode(result, 'utf-8', errors='ignore')
+                result = str(result, 'utf-8', errors='ignore')
                 result = json.loads(result)
                 self.logMsg("Got details of next up episode %s" % str(result), 2)
                 xbmc.sleep(100)
@@ -474,7 +474,7 @@ class Player(xbmc.Player):
                             liz.setThumbnailImage(item2['art'].get('thumb', ''))
                             liz.setIconImage('DefaultTVShows.png')
                             hasVideo = False
-                            for key, value in item2['streamdetails'].iteritems():
+                            for key, value in item2['streamdetails'].items():
                                 for stream in value:
                                     if 'video' in key:
                                         hasVideo = True
@@ -501,14 +501,14 @@ class Player(xbmc.Player):
 
         # Get the active player
         result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-        result = unicode(result, 'utf-8', errors='ignore')
+        result = str(result, 'utf-8', errors='ignore')
         self.logMsg("Got active player " + result, 2)
         result = json.loads(result)
 
         # Seems to work too fast loop whilst waiting for it to become active
         while not result["result"]:
             result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got active player " + result, 2)
             result = json.loads(result)
 
@@ -520,7 +520,7 @@ class Player(xbmc.Player):
             result = xbmc.executeJSONRPC(
                 '{"jsonrpc": "2.0", "id": 1, "method": "Player.GetItem", "params": {"playerid": ' + str(
                     playerid) + ', "properties": ["showtitle", "tvshowid", "episode", "season", "playcount"] } }')
-            result = unicode(result, 'utf-8', errors='ignore')
+            result = str(result, 'utf-8', errors='ignore')
             self.logMsg("Got details of playing media" + result, 2)
 
             result = json.loads(result)
@@ -565,7 +565,7 @@ class Player(xbmc.Player):
                 % tvshowid)
 
             if result:
-                result = unicode(result, 'utf-8', errors='ignore')
+                result = str(result, 'utf-8', errors='ignore')
                 result = json.loads(result)
                 self.logMsg("Got details of next up episode %s" % str(result), 2)
                 xbmc.sleep(100)

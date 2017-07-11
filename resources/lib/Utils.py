@@ -31,13 +31,13 @@ def logMsg(title, msg, level=1):
 def getJSON(method,params):
     json_response = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method" : "%s", "params": %s, "id":1 }' %(method, try_encode(params)))
     jsonobject = json.loads(json_response.decode('utf-8','replace'))
-    if(jsonobject.has_key('result')):
+    if('result' in jsonobject):
         jsonobject = jsonobject['result']
-        if jsonobject.has_key('movies'):
+        if 'movies' in jsonobject:
             return jsonobject['movies']
-        elif jsonobject.has_key('tvshows'):
+        elif 'tvshows' in jsonobject:
             return jsonobject['tvshows']
-        elif jsonobject.has_key('episodes'):
+        elif 'episodes' in jsonobject:
             return jsonobject['episodes']
 
 def try_encode(text, encoding="utf-8"):

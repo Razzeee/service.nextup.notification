@@ -6,7 +6,7 @@ import xbmcvfs
 import os
 from uuid import uuid4 as uuid4
 
-import Utils as utils
+from . import Utils as utils
 
 
 class ClientInformation():
